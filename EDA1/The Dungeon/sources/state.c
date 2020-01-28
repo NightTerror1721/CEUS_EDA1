@@ -16,6 +16,9 @@
  * Post:
  */
 void init_state(State* state, Dungeon* dungeon) {
+    state->dungeon = *dungeon;
+    state->current_position = get_starting_position(dungeon);
+    state->is_finished = FALSE;
 }
 
 /**
@@ -29,6 +32,7 @@ void init_state(State* state, Dungeon* dungeon) {
  * Post:
  */
 void set_current_position(State* state, Position position) {
+    state->current_position = position;
 }
 
 /**
@@ -41,7 +45,7 @@ void set_current_position(State* state, Position position) {
  * Post:
  */
 Position get_current_position(State* state) {
-    Position position = {0, 0};
+    Position position = state->current_position;
     return position;
 }
 
@@ -55,7 +59,7 @@ Position get_current_position(State* state) {
  * Post:
  */
 Room* get_current_room(State* state) {
-    return NULL;
+    return get_room_at_position(&state->dungeon, state->current_position);
 }
 
 /**
@@ -68,6 +72,7 @@ Room* get_current_room(State* state) {
  * Post:
  */
 void set_finished(State* state, int finished) {
+    state->is_finished = TRUE;
 }
 
 /**
@@ -79,7 +84,7 @@ void set_finished(State* state, int finished) {
  * Post:
  */
 int is_finished(State* state) {
-    return FALSE;
+    return state->is_finished;
 }
 
 /**

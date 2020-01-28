@@ -15,6 +15,7 @@
  * Post:
  */
 void init_wall(Wall *wall) {
+    memset(wall, 0, sizeof(Wall));
 }
 
 /**
@@ -52,7 +53,7 @@ char* get_wall_label(Wall *wall) {
  * Post:
  */
 int has_door(Wall *wall) {
-    return FALSE;
+    return wall->has_door;
 }
 
 /**
@@ -63,6 +64,7 @@ int has_door(Wall *wall) {
  * Post:
  */
 void add_door(Wall *wall) {
+    return wall->has_door = TRUE;
 }
 
 /**
@@ -73,6 +75,7 @@ void add_door(Wall *wall) {
  * Post:
  */
 void remove_door(Wall *wall) {
+    wall->has_door = FALSE;
 }
 
 /**
@@ -86,6 +89,10 @@ void remove_door(Wall *wall) {
  * Post:
  */
 int set_door_open(Wall* wall, int state) {
+    if (wall->has_door) {
+        wall->is_open = state;
+        return SUCCESS;
+    }
     return NO_DOOR_ERROR;
 }
 
@@ -99,7 +106,7 @@ int set_door_open(Wall* wall, int state) {
  * Post:
  */
 int open_door(Wall* wall) {
-    return NO_DOOR_ERROR;
+    return set_door_open(wall, TRUE);
 }
 
 /**
@@ -124,7 +131,7 @@ int close_door(Wall* wall) {
  * Post:
  */
 int has_open_door(Wall *wall) {
-    return FALSE;
+    return set_door_open(wall, FALSE);
 }
 
 /**
@@ -136,7 +143,7 @@ int has_open_door(Wall *wall) {
  * Post:
  */
 int has_exit_door(Wall *wall) {
-        return FALSE;
+        return wall->has_door && wall->is_exit;
 }
 
 /**
@@ -147,6 +154,8 @@ int has_exit_door(Wall *wall) {
  * Post:
  */
 void add_exit_door(Wall *wall) {
+    add_door(wall);
+    wall->is_exit = TRUE;
 }
 
 /**
@@ -157,4 +166,5 @@ void add_exit_door(Wall *wall) {
  * Post:
  */
 void remove_exit_door(Wall *wall) {
+    wall->is_exit = FALSE;
 }

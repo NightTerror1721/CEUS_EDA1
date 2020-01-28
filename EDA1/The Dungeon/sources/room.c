@@ -16,6 +16,12 @@
  * Post:
  */
 void init_room(Room *room) {
+    room->is_enabled = FALSE;
+    room->is_visited = FALSE;
+    init_wall(&room->north);
+    init_wall(&room->south);
+    init_wall(&room->east);
+    init_wall(&room->west);
 }
 
 /**
@@ -27,6 +33,7 @@ void init_room(Room *room) {
  * Post:
  */
 void enable_room(Room* room) {
+    room->is_enabled = TRUE;
 }
 
 /**
@@ -38,6 +45,7 @@ void enable_room(Room* room) {
  * Post:
  */
 void disable_room(Room* room) {
+    room->is_enabled = FALSE;
 }
 
 /**
@@ -50,7 +58,7 @@ void disable_room(Room* room) {
  * Post:
  */
 int is_enabled(Room* room) {
-    return FALSE;
+    return room->is_enabled;
 }
 
 /**
@@ -62,6 +70,7 @@ int is_enabled(Room* room) {
  * Post:
  */
 void mark_visited(Room* room) {
+    room->is_visited = TRUE;
 }
 
 /**
@@ -73,6 +82,7 @@ void mark_visited(Room* room) {
  * Post:
  */
 void clear_visited(Room* room) {
+    room->is_visited = FALSE;
 }
 
 /**
@@ -85,7 +95,7 @@ void clear_visited(Room* room) {
  * Post:
  */
 int is_visited(Room* room) {
-    return FALSE;
+    return room->is_visited;
 }
 
 /**
@@ -98,5 +108,11 @@ int is_visited(Room* room) {
  * Post:
  */
 Wall* get_wall(Room* room, char direction) {
-    return NULL;
+    switch (direction) {
+        case NORTH: return &room->north;
+        case SOUTH: return &room->south;
+        case EAST: return &room->east;
+        case WEST: return &room->west;
+        default: return NULL;
+    }
 }

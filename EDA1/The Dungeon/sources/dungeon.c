@@ -28,6 +28,7 @@ void set_position(Position* position, int row, int column) {
  * Post:
  */
 void set_starting_position(Dungeon *dungeon, int row, int column) {
+    set_position(&dungeon->initial_position, row, column);
 }
 
 /**
@@ -39,7 +40,7 @@ void set_starting_position(Dungeon *dungeon, int row, int column) {
  * Post:
  */
 Position get_starting_position(Dungeon *dungeon) {
-    Position position = {0, 0};
+    Position position = dungeon->initial_position;
     return position;
 }
 
@@ -52,7 +53,7 @@ Position get_starting_position(Dungeon *dungeon) {
  * Post:
  */
 Room* get_starting_room(Dungeon *dungeon) {
-    return NULL;
+    return &dungeon->rooms[dungeon->initial_position.row][dungeon->initial_position.column];
 }
 
 /**
@@ -67,7 +68,12 @@ Room* get_starting_room(Dungeon *dungeon) {
  * Post.
  */
 int is_valid_coordinates(int row, int column) {
-    return FALSE;
+    if (row < 0 || row >= ROwS)
+        return INVALID_ROW;
+    if (column < 0 || column >= COLUMNS)
+        return INVALID_COLUMN;
+    return TRUE;
+    //return row >= 0 && row < ROwS && column >= 0 && column < COLUMNS;
 }
 
 /**
@@ -80,7 +86,7 @@ int is_valid_coordinates(int row, int column) {
  * Post:
  */
 int is_valid_position(Position position) {
-    return FALSE;
+    return is_valid_coordinates(position.row, position.column);
 }
 
 /**
@@ -95,7 +101,7 @@ int is_valid_position(Position position) {
  * Post:
  */
 Room *get_room_at(Dungeon *dungeon, int row, int column) {
-    return NULL;
+    return is_valid_coordinates(row, column) == TRUE ? &dungeon->rooms[row][column] : NULL;
 }
 
 /**
@@ -109,7 +115,7 @@ Room *get_room_at(Dungeon *dungeon, int row, int column) {
  * Post:
  */
 Room* get_room_at_position(Dungeon *dungeon, Position position) {
-    return NULL;
+    return is_valid_position(position) == TRUE ? &dungeon->rooms[position.row][position.column] : NULL;
 }
 
 /**
@@ -121,5 +127,9 @@ Room* get_room_at_position(Dungeon *dungeon, Position position) {
  * Post:
  */
 int init_dungeon(Dungeon *dungeon) {
-    return ERROR;
+    set_starting_position(dungeon, 0, 0);
+    for (int r = 0; r < ROwS; ++r)
+        for (int c = 0; c < COLUMNS; ++c)
+            init_room(&dungeon->rooms[r][c]);
+    return SUCCESS;
 }
