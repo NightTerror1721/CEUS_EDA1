@@ -16,6 +16,8 @@ typedef struct {
 } Position;
 
 typedef struct {
+    Room rooms[ROwS][COLUMNS];
+    Position initial_position;
 } Dungeon;
 
 void set_position(Position* position, int row, int column);

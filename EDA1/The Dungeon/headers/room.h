@@ -15,6 +15,13 @@
 #define QUIT 'Q'
 
 typedef struct {
+	Wall north;
+	Wall south;
+	Wall east;
+	Wall west;
+
+	int is_enabled;
+	int is_visited;
 } Room;
 
 void init_room(Room* room);

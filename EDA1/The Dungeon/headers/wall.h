@@ -8,6 +8,9 @@
 #include "common.h"
 
 typedef struct {
+	int has_door;
+	int is_open;
+	int is_exit;
 } Wall;
 
 void init_wall(Wall* wall);

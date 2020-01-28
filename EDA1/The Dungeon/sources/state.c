@@ -41,7 +41,7 @@ void set_current_position(State* state, Position position) {
  * Post:
  */
 Position get_current_position(State* state) {
-    Position position;
+    Position position = {0, 0};
     return position;
 }
 

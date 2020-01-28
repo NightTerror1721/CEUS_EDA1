@@ -39,7 +39,7 @@ void set_starting_position(Dungeon *dungeon, int row, int column) {
  * Post:
  */
 Position get_starting_position(Dungeon *dungeon) {
-    Position position;
+    Position position = {0, 0};
     return position;
 }
 

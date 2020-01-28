@@ -8,6 +8,9 @@
 #include "dungeon.h"
 
 typedef struct {
+	Dungeon dungeon;
+	Position current_position;
+	int is_finished;
 } State;
 
 void init_state(State* state, Dungeon* dungeon);
