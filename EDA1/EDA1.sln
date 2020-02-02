@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29609.76
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "The Dungeon", "The Dungeon\The Dungeon.vcxproj", "{7ED24C07-5749-41AA-872C-8600B2B2E898}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Seminario 2 2019-2020", "Seminario 2 2019-2020\Seminario 2 2019-2020.vcxproj", "{E18D1F0D-3167-4AAD-A64A-2130BC1EEDDD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{7ED24C07-5749-41AA-872C-8600B2B2E898}.Release|x64.Build.0 = Release|x64
 		{7ED24C07-5749-41AA-872C-8600B2B2E898}.Release|x86.ActiveCfg = Release|Win32
 		{7ED24C07-5749-41AA-872C-8600B2B2E898}.Release|x86.Build.0 = Release|Win32
+		{E18D1F0D-3167-4AAD-A64A-2130BC1EEDDD}.Debug|x64.ActiveCfg = Debug|x64
+		{E18D1F0D-3167-4AAD-A64A-2130BC1EEDDD}.Debug|x64.Build.0 = Debug|x64
+		{E18D1F0D-3167-4AAD-A64A-2130BC1EEDDD}.Debug|x86.ActiveCfg = Debug|Win32
+		{E18D1F0D-3167-4AAD-A64A-2130BC1EEDDD}.Debug|x86.Build.0 = Debug|Win32
+		{E18D1F0D-3167-4AAD-A64A-2130BC1EEDDD}.Release|x64.ActiveCfg = Release|x64
+		{E18D1F0D-3167-4AAD-A64A-2130BC1EEDDD}.Release|x64.Build.0 = Release|x64
+		{E18D1F0D-3167-4AAD-A64A-2130BC1EEDDD}.Release|x86.ActiveCfg = Release|Win32
+		{E18D1F0D-3167-4AAD-A64A-2130BC1EEDDD}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

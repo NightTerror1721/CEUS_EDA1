@@ -1,0 +1,4 @@
+joan 10 3
+pedro 11 5
+joselu 34 3.4
+marieta 321 7.6

@@ -1,0 +1,7 @@
+joan 10 3 1235
+pedro 11 5 1152
+joselu 34 3.4 1235
+marieta 321 7.6 1457
+roberto 123 8 1235
+pepita 333 10 1457
+mazinger 423 7 1152
