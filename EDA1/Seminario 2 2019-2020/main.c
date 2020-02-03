@@ -57,7 +57,7 @@ int ex3() {
     if (!fa || !fout)
         return ERROR;
 
-    write_bars(fa, fout);
+    status = write_bars(fa, fout);
 
     fclose(fa);
     fclose(fout);
@@ -72,7 +72,14 @@ int ex4a() {
 
     int status = SUCCESS;
 
-    // Do the exercise here
+    FILE* f = fopen("resources/students.txt", "r");
+
+    if (!f)
+        return ERROR;
+
+    status = print_mean_best_simple(f);
+
+    fclose(f);
 
     return status;
 }
@@ -82,7 +89,14 @@ int ex4b() {
 
     int status = SUCCESS;
 
-    // Do the exercise here
+    FILE* f = fopen("resources/students.txt", "r");
+
+    if (!f)
+        return ERROR;
+
+    status = print_mean_best_student(f);
+
+    fclose(f);
 
     return status;
 }
@@ -93,7 +107,14 @@ int ex4c() {
 
     int status = SUCCESS;
 
-    // Do the exercise here
+    FILE* f = fopen("resources/students.txt", "r");
+
+    if (!f)
+        return ERROR;
+
+    status = print_mean_best_course(f);
+
+    fclose(f);
 
     return status;
 }
@@ -104,7 +125,14 @@ int ex5() {
 
     int status = SUCCESS;
 
-    // Do the exercise here
+    FILE* f = fopen("resources/courses.txt", "r");
+
+    if (!f)
+        return ERROR;
+
+    status = print_mean_courses(f);
+
+    fclose(f);
 
     return status;
 }

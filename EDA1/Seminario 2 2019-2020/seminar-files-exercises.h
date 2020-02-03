@@ -15,6 +15,18 @@ int print_mean_best_student(FILE* f);
 int print_mean_best_course(FILE* f);
 int print_mean_courses(FILE* f);
 
-int cat();
+typedef struct {
+	char  name[50];
+	int   nia;
+	float grade;
+} Student;
+
+typedef struct {
+	int id;
+	Student students[10];
+	int count;
+} Course;
+
+float average_grade(const Course* course);
 
 #endif //EDA1_SEMINARS_SEMINAR_FILES_EXERCISES_H
