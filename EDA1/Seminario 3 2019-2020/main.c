@@ -44,25 +44,26 @@ int main() {
         switch (option) {
             case OPTION_NEW_CLIENT:
                 read_client_from_stdin(&client);
-                add_client(&line, &client);
+                client_appeared(&line, &client);
                 break;
 
             case OPTION_ATTEND_CLIENT:
-                remove_first_client(&line);
+                attend_client(&line);
                 break;
 
             case OPTION_QUIT:
-                break;
+                goto end_while;
 
             default:
                 printf("Invalid option!. Try again...");
                 break;
         }
     }
+    end_while:
 
     printf("There are still %d clients in the line!", line.count);
 
-    cleanup(line);
+    cleanup(&line);
 
     return 0;
 }
