@@ -30,6 +30,7 @@ void init_wall(Wall *wall) {
  * Post:
  */
 void set_wall_label(Wall *wall, const char label[MAX_STRING]) {
+    strcpy(wall->label, label);
 }
 
 /**
@@ -41,7 +42,7 @@ void set_wall_label(Wall *wall, const char label[MAX_STRING]) {
  * Post:
  */
 char* get_wall_label(Wall *wall) {
-    return "";
+    return wall->label;
 }
 
 /**

@@ -11,6 +11,8 @@ typedef struct {
 	int has_door;
 	int is_open;
 	int is_exit;
+
+	const char label[MAX_STRING];
 } Wall;
 
 void init_wall(Wall* wall);
