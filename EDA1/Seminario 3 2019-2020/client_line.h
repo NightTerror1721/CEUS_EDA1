@@ -4,9 +4,7 @@
 #include "client.h"
 
 typedef struct _clientline {
-	Client* head;
-	Client* tail;
-	unsigned int count;
+
 } ClientLine;
 
 void init_line(ClientLine* line);
