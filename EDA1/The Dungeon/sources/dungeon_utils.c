@@ -229,6 +229,7 @@ int read_room_data(Dungeon* dungeon, int row, int column, const char* data) {
                 }
         }
     }
+    enable_room(room);
 
     return SUCCESS;
 }
