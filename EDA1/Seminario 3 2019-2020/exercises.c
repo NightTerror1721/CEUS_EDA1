@@ -59,3 +59,63 @@ void ex2b()
 		free(s);
 	}
 }
+
+
+
+
+/* Exercise 3 */
+
+int read_bookcost()
+{
+	int cost;
+	printf("Enter the book cost:\n");
+	if (scanf("%d\n", &cost) < 1)
+		return -1;
+	return cost;
+}
+
+int read_and_insert_bookcost(Student* s, unsigned int index)
+{
+	int cost = 0;
+	do
+	{
+		cost = read_bookcost();
+		if (cost < 1)
+			printf("Invalid cost\n");
+		else
+			s->costs[index] = cost;
+
+	} while (cost <= 0);
+	return cost;
+}
+
+void ex3()
+{
+	Student s;
+	int total_cost = 0;
+	read_student(&s);
+
+
+	/* 3A */
+	s.costs = (int*) malloc(sizeof(int) * 4);
+	s.cost_count = 4;
+
+	for (int i = 0; i < 4; ++i)
+	{
+		int cost = read_and_insert_bookcost(&s, i);
+		total_cost += cost;
+	}
+	printf("The total cost for student %s is %d\n", s.name, total_cost);
+
+
+	/* 3B */
+	s.costs = realloc(s.costs, sizeof(int) * 6);
+	s.cost_count = 6;
+
+	for (int i = 4; i < 6; ++i)
+	{
+		int cost = read_and_insert_bookcost(&s, i);
+		total_cost += cost;
+	}
+	printf("The new total cost for student %s is %d\n", s.name, total_cost);
+}
