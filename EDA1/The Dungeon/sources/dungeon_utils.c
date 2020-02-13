@@ -276,9 +276,11 @@ int load_dungeon_file(Dungeon* dungeon, FILE* fd) {
     if (!fd)
         return FILE_NOT_FOUND;
 
+    init_dungeon(dungeon);
+
     // Por ahora solo comprobamos que la linea que especifica el tamaño de la dungeon esté presente//
     int rows = -1, columns = -1;
-    fscanf("%dx%d\n", &rows, &columns);
+    fscanf(fd, "%dx%d\n", &rows, &columns);
     if (rows < 1 || columns < 1)
         return ERROR;
     /////////////////////////////////////////////////////////////////////////////////////////////////
