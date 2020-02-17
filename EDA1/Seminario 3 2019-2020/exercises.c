@@ -20,13 +20,13 @@ void print_student(Student* s)
 void read_student(Student* s)
 {
 	printf("Student name:\n");
-	scanf_s("%s\n", s->name, MAX_STRING_LEN);
+	fgets(s->name, MAX_STRING_LEN, stdin);
 
 	printf("Student nia:\n");
-	scanf("%d\n", &s->nia);
+	scanf("\n%d", &s->nia);
 
 	printf("Student grade:\n");
-	scanf("%f\n", &s->grade);
+	scanf("\n%f", &s->grade);
 }
 
 void ex2a()
@@ -41,7 +41,7 @@ void ex2b()
 {
 	unsigned int count;
 	printf("Number of students:\n");
-	scanf("%u\n", &count);
+	scanf("\n%u", &count);
 
 	if (count == 0)
 		return;
@@ -69,7 +69,7 @@ int read_bookcost()
 {
 	int cost;
 	printf("Enter the book cost:\n");
-	if (scanf("%d\n", &cost) < 1)
+	if (scanf("\n%d", &cost) < 1)
 		return -1;
 	return cost;
 }

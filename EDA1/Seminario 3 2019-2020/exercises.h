@@ -23,7 +23,7 @@ void ex2b(void);
 
 /* Exercise 3 */
 int read_bookcost(void);
-void read_and_insert_bookcost(Student* s, unsigned int index);
+int read_and_insert_bookcost(Student* s, unsigned int index);
 
 void ex3(void);
 
