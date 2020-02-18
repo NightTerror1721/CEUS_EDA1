@@ -16,7 +16,7 @@
  * Post:
  */
 void init_state(State* state, Dungeon* dungeon) {
-    state->dungeon = *dungeon;
+    state->dungeon = dungeon;
     state->current_position = get_starting_position(dungeon);
     state->is_finished = FALSE;
 }
@@ -59,7 +59,7 @@ Position get_current_position(State* state) {
  * Post:
  */
 Room* get_current_room(State* state) {
-    return get_room_at_position(&state->dungeon, state->current_position);
+    return get_room_at_position(state->dungeon, state->current_position);
 }
 
 /**
@@ -101,7 +101,50 @@ int is_finished(State* state) {
  * Post:
  */
 int move(State* state, char direction) {
-    return ERROR;
+
+    Position pos = state->current_position;
+    Room* current_room = get_current_room(state);
+
+    Wall* next_wall = get_wall(current_room, direction);
+    if (!next_wall)
+        return INVALID_MOVE;
+
+    if (!has_door(next_wall))
+        return NO_DOOR_ERROR;
+    if (!has_open_door(next_wall))
+        return NO_DOOR_ERROR; //The door is closed.
+
+    switch (direction)
+    {
+        case NORTH:
+            pos.row -= 1;
+            break;
+        case SOUTH:
+            pos.row += 1;
+            break;
+        case EAST:
+            pos.column += 1;
+            break;
+        case WEST:
+            pos.column -= 1;
+            break;
+        default:
+            return INVALID_MOVE;
+    }
+
+    if (!is_valid_position(pos))
+        return INVALID_MOVE;
+
+    Room* next_room = get_room_at_position(state->dungeon, pos);
+    if (!next_room)
+        return INVALID_DIRECTION; //no room in that direction
+
+    if (has_exit_door(next_wall))
+        state->is_finished = TRUE;
+
+    state->current_position = pos;
+    
+    return TRUE;
 }
 
 /**
@@ -118,5 +161,23 @@ int move(State* state, char direction) {
  * Post:
  */
 int go_back(State* state, char direction) {
-    return INVALID_MOVE;
+    switch (direction)
+    {
+        case NORTH:
+            direction = SOUTH;
+            break;
+            
+        case SOUTH:
+            direction = NORTH;
+            break;
+
+        case EAST:
+            direction = WEST;
+            break;
+
+        case WEST:
+            direction = EAST;
+            break;
+    }
+    return move(state, direction);
 }

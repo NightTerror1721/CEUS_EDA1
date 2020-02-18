@@ -182,7 +182,57 @@ void init_two_rooms_dungeon(Dungeon *dungeon) {
  * Post:
  */
 int read_room_data(Dungeon* dungeon, int row, int column, const char* data) {
-    return ERROR;
+    if (row < 0 || row >= ROwS || column < 0 || column >= COLUMNS)
+        return INVALID_ROOM_DATA;
+
+    Room* room = get_room_at(dungeon, row, column);
+    Wall* wall;
+    const size_t len = strlen(data);
+    for (unsigned int i = 0; i < len; ++i)
+    {
+        switch (data[i])
+        {
+            case 'I':
+                if (i != 0)
+                    return INVALID_ROOM_DATA;
+                set_starting_position(dungeon, row, column);
+                break;
+
+            case 'N':
+            case 'S':
+            case 'E':
+            case 'W':
+                wall = get_wall(room, data[i]);
+                if (has_door(wall))
+                    return INVALID_ROOM_DATA;
+                add_door(wall);
+                open_door(wall);
+                
+                while (i + 1 < len)
+                {
+                    switch (data[i + 1])
+                    {
+                        case 'C':
+                            if (!has_open_door(wall))
+                                return INVALID_ROOM_DATA;
+                            close_door(wall);
+                            ++i;
+                            continue; //next while iteration
+
+                        case 'X':
+                            if(has_exit_door(wall))
+                                return INVALID_ROOM_DATA;
+                            add_exit_door(wall);
+                            ++i;
+                            continue; //next while iteration
+                    }
+                    break; //end of while
+                }
+        }
+    }
+    enable_room(room);
+
+    return SUCCESS;
 }
 
 /**
@@ -196,7 +246,22 @@ int read_room_data(Dungeon* dungeon, int row, int column, const char* data) {
  * Post:
  */
 int read_room_line(Dungeon* dungeon, FILE* fd) {
-    return ERROR;
+    if (!fd)
+        return FILE_NOT_FOUND;
+
+    char line[256];
+    if (!fgets(line, 256, fd))
+        return SUCCESS; //Linea vacía o final del archivo
+
+    int row = -1, column = -1;
+    char data[9] = "";
+
+    if (sscanf_s(line, "%d %d %s", &row, &column, data, 9) < 1)
+        return SUCCESS; //Linea vacía
+    if (row < 0 || column < 0)
+        return INVALID_ROOM_LINE;
+
+    return read_room_data(dungeon, row, column, data);
 }
 
 /**
@@ -210,7 +275,23 @@ int read_room_line(Dungeon* dungeon, FILE* fd) {
  * Post:
  */
 int load_dungeon_file(Dungeon* dungeon, FILE* fd) {
-    return ERROR;
+    if (!fd)
+        return FILE_NOT_FOUND;
+
+    init_dungeon(dungeon);
+
+    // Por ahora solo comprobamos que la linea que especifica el tamaño de la dungeon esté presente//
+    int rows = -1, columns = -1;
+    fscanf(fd, "%dx%d\n", &rows, &columns);
+    if (rows < 1 || columns < 1)
+        return ERROR;
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+
+    int status = SUCCESS;
+    while (status == SUCCESS && !feof(fd))
+        status = read_room_line(dungeon, fd);
+
+    return status;
 }
 
 /**
@@ -224,5 +305,12 @@ int load_dungeon_file(Dungeon* dungeon, FILE* fd) {
  * Post:
  */
 int load_dungeon(Dungeon* dungeon, char* path) {
-    return ERROR;
+    FILE* f = fopen(path, "r");
+    if (!f)
+        return FILE_NOT_FOUND;
+
+    int status = load_dungeon_file(dungeon, f);
+    fclose(f);
+
+    return status;
 }

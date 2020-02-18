@@ -30,6 +30,7 @@ void init_wall(Wall *wall) {
  * Post:
  */
 void set_wall_label(Wall *wall, const char label[MAX_STRING]) {
+    strcpy(wall->label, label);
 }
 
 /**
@@ -41,7 +42,7 @@ void set_wall_label(Wall *wall, const char label[MAX_STRING]) {
  * Post:
  */
 char* get_wall_label(Wall *wall) {
-    return "";
+    return wall->label;
 }
 
 /**
@@ -64,7 +65,7 @@ int has_door(Wall *wall) {
  * Post:
  */
 void add_door(Wall *wall) {
-    return wall->has_door = TRUE;
+    wall->has_door = TRUE;
 }
 
 /**
@@ -119,7 +120,7 @@ int open_door(Wall* wall) {
  * Post:
  */
 int close_door(Wall* wall) {
-    return NO_DOOR_ERROR;
+    return set_door_open(wall, FALSE);
 }
 
 /**
@@ -131,7 +132,7 @@ int close_door(Wall* wall) {
  * Post:
  */
 int has_open_door(Wall *wall) {
-    return set_door_open(wall, FALSE);
+    return wall->is_open;
 }
 
 /**
