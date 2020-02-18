@@ -5,6 +5,28 @@
 #include <string.h>
 
 
+int read_string(char str[MAX_STRING_LEN])
+{
+	char buffer[MAX_STRING_LEN];
+	fgets(buffer, MAX_STRING_LEN, stdin);
+	return sscanf(buffer, "%s\n", str);
+}
+
+int read_int(int* ptr)
+{
+	char buffer[32];
+	fgets(buffer, 32, stdin);
+	return sscanf(buffer, "%d\n", ptr);
+}
+
+int read_float(float* ptr)
+{
+	char buffer[32];
+	fgets(buffer, 32, stdin);
+	return sscanf(buffer, "%f\n", ptr);
+}
+
+
 void init_student(Student* s, char name[MAX_STRING_LEN], int nia, float grade)
 {
 	strcpy(s->name, name);
@@ -14,19 +36,19 @@ void init_student(Student* s, char name[MAX_STRING_LEN], int nia, float grade)
 
 void print_student(Student* s)
 {
-	printf("[name: %s; nia: %d; grade: %f]", s->name, s->nia, s->grade);
+	printf("[name: %s; nia: %d; grade: %f]\n", s->name, s->nia, s->grade);
 }
 
 void read_student(Student* s)
 {
 	printf("Student name:\n");
-	fgets(s->name, MAX_STRING_LEN, stdin);
+	read_string(s->name);
 
 	printf("Student nia:\n");
-	scanf("\n%d", &s->nia);
+	read_int(&s->nia);
 
 	printf("Student grade:\n");
-	scanf("\n%f", &s->grade);
+	read_float(&s->grade);
 }
 
 void ex2a()
@@ -39,22 +61,22 @@ void ex2a()
 
 void ex2b()
 {
-	unsigned int count;
+	int count = 0;
 	printf("Number of students:\n");
-	scanf("\n%u", &count);
+	read_int(&count);
 
-	if (count == 0)
+	if (count <= 0)
 		return;
 
 	Student* s = (Student*)malloc(sizeof(Student) * count);
 	if (s != NULL)
 	{
-		for (unsigned int i = 0; i < count; ++i)
+		for (int i = 0; i < count; ++i)
 		{
-			printf("Student number %u", i);
+			printf("Student number %d\n", i);
 			read_student(&s[i]);
 		}
-		for (unsigned int i = 0; i < count; ++i)
+		for (int i = 0; i < count; ++i)
 			print_student(&s[i]);
 		free(s);
 	}
@@ -69,7 +91,7 @@ int read_bookcost()
 {
 	int cost;
 	printf("Enter the book cost:\n");
-	if (scanf("\n%d", &cost) < 1)
+	if (read_int(&cost) < 1)
 		return -1;
 	return cost;
 }

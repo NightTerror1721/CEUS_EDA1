@@ -12,16 +12,23 @@ void init_line(ClientLine* line) {
 }
 
 void client_appeared(ClientLine* line, Client* client) {
+
+	Client* new_client = (Client*)malloc(sizeof(Client));
+	if (!new_client)
+		return;
+
+	memcpy(new_client, client, sizeof(Client));
+
 	if (!line->head)
 	{
-		line->head = line->tail = client;
-		client->next = NULL;
+		line->head = line->tail = new_client;
+		new_client->next = NULL;
 	}
 	else
 	{
-		line->tail->next = client;
-		client->next = NULL;
-		line->tail = client;
+		line->tail->next = new_client;
+		new_client->next = NULL;
+		line->tail = new_client;
 	}
 	line->count++;
 }

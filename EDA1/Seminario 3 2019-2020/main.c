@@ -32,7 +32,7 @@ int show_menu() {
     return read_int_option("Choose an option:\n");
 }
 
-int main() {
+/*int main() {
     Client client;
     ClientLine line;
     init_line(&line);
@@ -64,6 +64,15 @@ int main() {
     printf("There are still %d clients in the line!", line.count);
 
     cleanup(&line);
+
+    return 0;
+}*/
+
+#include "exercises.h"
+int main()
+{
+    ex2a();
+    ex2b();
 
     return 0;
 }

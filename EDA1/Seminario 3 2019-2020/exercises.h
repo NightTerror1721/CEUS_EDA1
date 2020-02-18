@@ -12,6 +12,11 @@ typedef struct {
 	unsigned int cost_count;
 } Student;
 
+/* STDIN functions */
+int read_string(char str[MAX_STRING_LEN]);
+int read_int(int* ptr);
+int read_float(float* ptr);
+
 /* Exercise 2 */
 void init_student(Student* s, char name[MAX_STRING_LEN], int nia, float grade);
 void print_student(Student* s);
