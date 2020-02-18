@@ -188,7 +188,7 @@ int read_room_data(Dungeon* dungeon, int row, int column, const char* data) {
     Room* room = get_room_at(dungeon, row, column);
     Wall* wall;
     const size_t len = strlen(data);
-    for (int i = 0; i < len; ++i)
+    for (unsigned int i = 0; i < len; ++i)
     {
         switch (data[i])
         {
@@ -206,6 +206,7 @@ int read_room_data(Dungeon* dungeon, int row, int column, const char* data) {
                 if (has_door(wall))
                     return INVALID_ROOM_DATA;
                 add_door(wall);
+                open_door(wall);
                 
                 while (i + 1 < len)
                 {
@@ -249,7 +250,7 @@ int read_room_line(Dungeon* dungeon, FILE* fd) {
         return FILE_NOT_FOUND;
 
     char line[256];
-    if (fgets(line, 256, fd) < 1)
+    if (!fgets(line, 256, fd))
         return SUCCESS; //Linea vacía o final del archivo
 
     int row = -1, column = -1;

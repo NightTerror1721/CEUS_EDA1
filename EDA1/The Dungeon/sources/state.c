@@ -16,7 +16,7 @@
  * Post:
  */
 void init_state(State* state, Dungeon* dungeon) {
-    state->dungeon = *dungeon;
+    state->dungeon = dungeon;
     state->current_position = get_starting_position(dungeon);
     state->is_finished = FALSE;
 }
@@ -59,7 +59,7 @@ Position get_current_position(State* state) {
  * Post:
  */
 Room* get_current_room(State* state) {
-    return get_room_at_position(&state->dungeon, state->current_position);
+    return get_room_at_position(state->dungeon, state->current_position);
 }
 
 /**
@@ -111,7 +111,7 @@ int move(State* state, char direction) {
 
     if (!has_door(next_wall))
         return NO_DOOR_ERROR;
-    if(!has_open_door(next_wall))
+    if (!has_open_door(next_wall))
         return NO_DOOR_ERROR; //The door is closed.
 
     switch (direction)
@@ -135,7 +135,7 @@ int move(State* state, char direction) {
     if (!is_valid_position(pos))
         return INVALID_MOVE;
 
-    Room* next_room = get_room_at_position(&state->dungeon, pos);
+    Room* next_room = get_room_at_position(state->dungeon, pos);
     if (!next_room)
         return INVALID_DIRECTION; //no room in that direction
 

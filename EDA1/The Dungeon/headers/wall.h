@@ -12,7 +12,7 @@ typedef struct {
 	int is_open;
 	int is_exit;
 
-	const char label[MAX_STRING];
+	char label[MAX_STRING];
 } Wall;
 
 void init_wall(Wall* wall);

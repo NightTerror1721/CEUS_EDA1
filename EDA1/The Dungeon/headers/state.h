@@ -8,7 +8,7 @@
 #include "dungeon.h"
 
 typedef struct {
-	Dungeon dungeon;
+	Dungeon* dungeon;
 	Position current_position;
 	int is_finished;
 } State;
