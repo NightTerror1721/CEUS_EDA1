@@ -278,14 +278,19 @@ int load_dungeon_file(Dungeon* dungeon, FILE* fd) {
     if (!fd)
         return FILE_NOT_FOUND;
 
+    // Inicializamos la dungeon para que esté vacia y no tenga basura en sus valores //
     init_dungeon(dungeon);
 
-    // Por ahora solo comprobamos que la linea que especifica el tamaño de la dungeon esté presente//
+    // Obtenemos las filas y columnas de la dungeon, y comprobamos que sean validas //
     int rows = -1, columns = -1;
     fscanf(fd, "%dx%d\n", &rows, &columns);
     if (rows < 1 || columns < 1)
         return ERROR;
+
+    dungeon->rooms = NULL;
+    resize_dungeon(dungeon, rows, columns);
     /////////////////////////////////////////////////////////////////////////////////////////////////
+    
 
     int status = SUCCESS;
     while (status == SUCCESS && !feof(fd))

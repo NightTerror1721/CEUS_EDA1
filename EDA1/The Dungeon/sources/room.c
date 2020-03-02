@@ -58,7 +58,7 @@ void disable_room(Room* room) {
  * Post:
  */
 int is_enabled(Room* room) {
-    return room->is_enabled;
+    return room && room->is_enabled;
 }
 
 /**

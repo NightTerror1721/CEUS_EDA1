@@ -2,6 +2,7 @@
 // Created by rcarlini on 14/10/19.
 //
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "../headers/dungeon.h"
 
@@ -53,7 +54,7 @@ Position get_starting_position(Dungeon *dungeon) {
  * Post:
  */
 Room* get_starting_room(Dungeon *dungeon) {
-    return &dungeon->rooms[dungeon->initial_position.row][dungeon->initial_position.column];
+    return get_room_at_position(dungeon, dungeon->initial_position);
 }
 
 /**
@@ -67,13 +68,12 @@ Room* get_starting_room(Dungeon *dungeon) {
  * Pre:
  * Post.
  */
-int is_valid_coordinates(int row, int column) {
-    if (row < 0 || row >= ROwS)
+int is_valid_coordinates(Dungeon* dungeon, int row, int column) {
+    if (row < 0 || row >= dungeon->rows)
         return INVALID_ROW;
-    if (column < 0 || column >= COLUMNS)
+    if (column < 0 || column >= dungeon->columns)
         return INVALID_COLUMN;
     return TRUE;
-    //return row >= 0 && row < ROwS && column >= 0 && column < COLUMNS;
 }
 
 /**
@@ -85,8 +85,8 @@ int is_valid_coordinates(int row, int column) {
  * Pre:
  * Post:
  */
-int is_valid_position(Position position) {
-    return is_valid_coordinates(position.row, position.column);
+int is_valid_position(Dungeon* dungeon, Position position) {
+    return is_valid_coordinates(dungeon, position.row, position.column);
 }
 
 /**
@@ -101,7 +101,9 @@ int is_valid_position(Position position) {
  * Post:
  */
 Room *get_room_at(Dungeon *dungeon, int row, int column) {
-    return is_valid_coordinates(row, column) == TRUE ? &dungeon->rooms[row][column] : NULL;
+    if (is_valid_coordinates(dungeon, row, column))
+        return &dungeon->rooms[row * dungeon->columns + column];
+    return NULL;
 }
 
 /**
@@ -115,7 +117,16 @@ Room *get_room_at(Dungeon *dungeon, int row, int column) {
  * Post:
  */
 Room* get_room_at_position(Dungeon *dungeon, Position position) {
-    return is_valid_position(position) == TRUE ? &dungeon->rooms[position.row][position.column] : NULL;
+    return get_room_at(dungeon, position.row, position.column);
+}
+
+/**
+ * Releases the memory allocated when constructing the dungeon, if any.
+ * @param dungeon The dungeon to be freed.
+ */
+void free_dungeon(Dungeon* dungeon) {
+    if (dungeon->rooms)
+        free(dungeon->rooms);
 }
 
 /**
@@ -127,9 +138,74 @@ Room* get_room_at_position(Dungeon *dungeon, Position position) {
  * Post:
  */
 int init_dungeon(Dungeon *dungeon) {
+
     set_starting_position(dungeon, 0, 0);
-    for (int r = 0; r < ROwS; ++r)
-        for (int c = 0; c < COLUMNS; ++c)
-            init_room(&dungeon->rooms[r][c]);
+
+    dungeon->rows = dungeon->columns = 0;
+    dungeon->rooms = NULL;
+
+    return SUCCESS;
+}
+
+/**
+ * Resizes the dungeon, freeing the previously allocated rooms if needed.
+ * @param dungeon  The dungeon to be resized.
+ * @param rows The rows of the new dungeon
+ * @param columns The columns of the new dungeon.
+ * @return SUCCESS code if the initialization was successful, ERROR code if something went wrong.
+ */
+int resize_dungeon(Dungeon* dungeon, int rows, int columns) {
+
+    if (rows < 1 || columns < 1)
+        return ERROR;
+
+    // Reservamos memoria para (rows * columns) Rooms //
+    Room* new_rooms = (Room*) calloc(rows * columns, sizeof(Room));
+    if (!new_rooms) // Nos aseguramos de que no haya fallado la reserva //
+        return ERROR;
+
+    // Si ya habia Rooms reservadas previamente, copiamos aquellas que puedan caber en la nueva dungeon //
+    if (dungeon->rooms)
+    {
+        for (int r = 0; r < rows; ++r)
+            for (int c = 0; c < columns; ++c)
+            {
+                // Si la fila y la columna actual es valida en la dungeon antigua, entonces copiamos //
+                if (r < dungeon->rows && c < dungeon->columns)
+                    new_rooms[r * columns + c] = dungeon->rooms[r * dungeon->columns + c];
+                else // Si no, entonces inicializamos la Room //
+                    init_room(&new_rooms[r * columns + c]);
+            }
+
+        // Destruimos la memoria de las Rooms viejas //
+        free_dungeon(dungeon);
+    }
+    else // Si no habia Rooms en la dungeon, entonces las inicializamos todas //
+    {
+        int len = rows * columns;
+        for (int i = 0; i < len; ++i)
+            init_room(new_rooms + i);
+    }
+
+    dungeon->rows = rows;
+    dungeon->columns = columns;
+    dungeon->rooms = new_rooms;
+
+    return SUCCESS;
+}
+
+/**
+ * Resets the visited flag in all the rooms, clearing it.
+ * @param dungeon The dungeon to be reset.
+ * @return SUCCESS code if the reset was successful, ERROR code if something went wrong.
+ */
+int reset_visited(Dungeon* dungeon) {
+    if(!dungeon->rooms)
+        return ERROR;
+
+    int len = dungeon->rows * dungeon->columns;
+    for (int i = 0; i < len; ++i)
+        clear_visited(dungeon->rooms + i);
+
     return SUCCESS;
 }

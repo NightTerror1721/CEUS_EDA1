@@ -3,6 +3,7 @@
 //
 
 #include <stddef.h>
+#include <stdlib.h>
 #include "../headers/state.h"
 
 /**
@@ -19,6 +20,8 @@ void init_state(State* state, Dungeon* dungeon) {
     state->dungeon = dungeon;
     state->current_position = get_starting_position(dungeon);
     state->is_finished = FALSE;
+    state->path.first = state->path.last = NULL;
+    state->path.count = 0;
 }
 
 /**
@@ -88,6 +91,100 @@ int is_finished(State* state) {
 }
 
 /**
+ * Adds the step as the first step of the path sequence.
+ *
+ * @param state The current state.
+ * @param direction The direction of the step.
+ */
+void add_as_first_step(State* state, Position position, char direction) {
+
+    Step* s = (Step*) malloc(sizeof(Step));
+    if (!s)
+        return;
+
+    s->origin = position;
+    s->direction = direction;
+
+    if (!state->path.first)
+    {
+        state->path.first = state->path.last = s;
+        s->next = s->prev = NULL;
+    }
+    else
+    {
+        state->path.first->prev = s;
+        s->next = state->path.first;
+
+        state->path.first = s;
+    }
+
+    state->path.count++;
+}
+
+/**
+ * Adds the step as the last step of the path sequence.
+ *
+ * @param state The current state.
+ * @param direction The direction of the step.
+ */
+void add_as_last_step(State* state, Position position, char direction) {
+
+    Step* s = (Step*)malloc(sizeof(Step));
+    if (!s)
+        return;
+
+    s->origin = position;
+    s->direction = direction;
+
+    if (!state->path.last)
+    {
+        state->path.last = state->path.first = s;
+        s->next = s->prev = NULL;
+    }
+    else
+    {
+        state->path.last->next = s;
+        s->prev = state->path.last;
+
+        state->path.last = s;
+    }
+
+    state->path.count++;
+}
+
+/**
+ * Deletes (freeing if needed) all the steps stored in the path of the state.
+ * @param state The state with the path to be cleare.
+ */
+void clear_path(State* state) {
+
+    Step *s, *next;
+    s = state->path.first;
+    while (s)
+    {
+        next = s->next;
+        free(s);
+        s = next;
+    }
+
+    state->path.first = state->path.last = NULL;
+    state->path.count = 0;
+}
+
+/**
+ * Resets the state, clearing the state path and reverting the visited marks on the dungeon rooms.
+ *
+ * @param state The state to be reset.
+ */
+void reset(State* state) {
+    
+    clear_path(state);
+
+    if (state->dungeon)
+        reset_visited(state->dungeon);
+}
+
+/**
  * If the move is valid, moves the player in the input direction, updating the current room position.
  * If there is no room in that direction, returns INVALID_DIRECTION code.
  * If the wall in the direction does not have a door, returns NO_DOOR_ERROR.
@@ -132,7 +229,7 @@ int move(State* state, char direction) {
             return INVALID_MOVE;
     }
 
-    if (!is_valid_position(pos))
+    if (!is_valid_position(state->dungeon, pos))
         return INVALID_MOVE;
 
     Room* next_room = get_room_at_position(state->dungeon, pos);
